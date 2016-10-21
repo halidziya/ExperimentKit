@@ -28,11 +28,11 @@ function plotHierarchicalData(X,slabels,labels,sampleindex)
     end
     lmap = unique([slabels labels],'rows');
     for i=1:max(slabels)
-        if (sum(slabels==i) > (size(X,2)+1))
+        if (sum(slabels==i) > (size(X,2)))
             try
                 plot_gaussian_ellipsoid(mean(X(slabels==i,1:2)),squeeze(mean(covs(lmap(lmap(:,1)==i,2),:,:),1)),'-',[0.4 0.2 0.2],2,2)
             catch 
-                fprint('Skipped')
+                fprintf(1,'Skipped')
             end
         end
     end

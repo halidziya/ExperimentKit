@@ -1,2 +1,2 @@
 # ExperimentKit
-Matlab files for evaluating different algorithms
+Matlab files to evaluate different algorithms
