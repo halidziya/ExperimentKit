@@ -8,7 +8,7 @@ for datai=1:length(names)
     prefix = char(strcat(folder,'/',names(datai),'/'));
     mkdir([prefix,'\plots\']);
     run(files{datai});
-    X=igmm_normalize(X,32);
+    X=igmm_normalize(X,20);
     
     d=size(X,2);
     k0=0.05;
@@ -34,14 +34,16 @@ for datai=1:length(names)
     burn_in='1440';
     step='20';
     fprintf(1,'I2GMM is running...\n');
-    cmd = ['i2s.exe ',data,' ',meanpath,' ',psipath,' ',params,' ',num_sweeps,' ', burn_in,' ',step];
+    cmd = ['i2gmmh.exe ',data];
     tic;
     system(cmd);
     elapsed(datai) = toc;
 
-    slabels=readMat(char(strcat(prefix ,names(datai),'.matrix.superlabels')))+1;
-    labels=readMat(char(strcat(prefix ,names(datai),'.matrix.labels')))+1;
+    slabels=readMat('Labels.matrix');
+    %slabels=readMat(char(strcat(prefix ,names(datai),'.matrix.superlabels')))+1;
+    %labels=readMat(char(strcat(prefix ,names(datai),'.matrix.labels')))+1;
     alabels = align_labels(slabels');
     f1s=evaluationTable(Y(Y~=0),alabels(Y~=0))
     plotHierarchicalData(X,alabels',alabels');
+    %keyboard;
 end
