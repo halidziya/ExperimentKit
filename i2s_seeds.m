@@ -1,8 +1,8 @@
 experiments='experiments/';
 folder = strcat(experiments,'parallel');
 igmm_mkdir(folder);
-run('..\data\pines\readData.m')
-prefix = char(strcat(folder,'/Indian/i'));
+run('..\data\seeds\readData.m')
+prefix = char(strcat(folder,'/seeds/i'));
 mkdir([prefix,'\plots\']);
 X=igmm_normalize(X,20,true);
 
@@ -39,7 +39,6 @@ X=igmm_normalize(X,20,true);
 %    macs=[];
 %     for i=1:51; at=evaluationTable(Y(Y~=0),labels(Y~=0,i));macs(i)=table2array(at(1,1));end
 %     SC =[ SC ; [likelihood(801:4:1002),macs']];
-    slabels(isnan(slabels))=1
      labels = align_labels(slabels');
 
     %slabels=readMat(char(strcat(prefix ,'.matrix.superlabels')))+1;
@@ -55,5 +54,5 @@ X=igmm_normalize(X,20,true);
     subplot(2,1,2);
     scatter(X(:,1),X(:,2),10,labels);
 
-mean(macf1)
+macf1
 micf1

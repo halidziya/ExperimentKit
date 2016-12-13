@@ -4,7 +4,7 @@ igmm_mkdir(folder);
 run('..\data\a053\readData.m')
 prefix = char(strcat(folder,'/a053/a'));
 mkdir([prefix,'\plots\']);
-X=igmm_normalize(X,12,true);
+X=igmm_normalize(X,10,true);
 %X=X(Y~=0,:);
 %Y=Y(Y~=0);
 

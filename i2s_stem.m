@@ -2,20 +2,21 @@ clear all;
 clc;
 currentDir=pwd;
 addpath([currentDir,'\src']);
-addpath([currentDir,'\experiments\FC\data']);
-results_parentdir=[currentDir,'\experiments\FC\results\'];
+addpath([currentDir,'\experiments\stem\data']);
+results_parentdir=[currentDir,'\experiments\stem\results\'];
 addpath(results_parentdir);
  
  
 %% load image data
 load(['..\data\stemcell\','stemcell_all.mat']);
 %load('\\IN-CSCI-H40452\Users\mdundar\Desktop\Data\FlowCapINature\FlowCAP-I\Data\FCM\csv\Lymph\CSV\stemcell_all.mat')
-X_all= igmm_normalize(X_all_orig,32,true);
+X_all= igmm_normalize(X_all_orig,32,false);
 ug=unique(G_all);
 ng=length(ug);
 s_range=1:30;
 macf1 = zeros(30,1);
-for datai=1:length(s_range)
+micf1=[];
+parfor datai=1:length(s_range)
 in=G_all==ug(s_range(datai));
 X=X_all(in,:);
 Y=Y_all(in);
@@ -29,8 +30,9 @@ Y=Y_all(in);
     ki=0.5;
     m=d+2;
     mu0=mean(X,1);
-    Psi=(m-d-1)*eye(d);%*diag([1 1 0.1 0.1 0.1]);
+    Psi=1*(m-d-1)*eye(d);%*diag([1 1 0.1 0.1 0.1]);
     alp=1; gam=1;
+
 
     fprintf(1,'Writing files...\n');
     i2gmm_createBinaryFiles(char(strcat(prefix  , num2str(datai))),X,Psi,mu0,m,k0,ki,alp,gam);
@@ -57,6 +59,7 @@ Y=Y_all(in);
     alabels = align_labels(slabels');
     f1s=evaluationTable(Y(Y~=0),alabels(Y~=0))
     macf1(datai) = table2array(f1s(1,1))
+    micf1(datai) = table2array(f1s(1,2))
     clf;
     subplot(2,1,1);
     scatter(X(:,1),X(:,2),10,1+Y);
@@ -64,3 +67,5 @@ Y=Y_all(in);
     subplot(2,1,2);
     plotHierarchicalData(X,alabels',alabels');
 end
+mean(macf1)
+mean(micf1)
