@@ -1,37 +1,23 @@
+load ../data/ndd/ndd_all.mat
 experiments='experiments/';
 folder = strcat(experiments,'parallel');
 igmm_mkdir(folder);
-
-
-metadata = [];
-for trial=1:60  
 macf1=[];
 micf1=[];
-f1s = {};
-d =6;
-k0=0.1;
-ki=0.8;
-%m=150*d;
-m=5*trial*d+2;%398;%d+2+randi(100,1)*d;
-
-%Psi=diag([0.6 0.6 0.3 0.3 0.3 0.3])*(m-d-1);
-%Psi=(m-d-1)*diag([5*rand(d,1)]);
-%Psi=(m-d-1)*diag([3.66 , 3.65, 4.79, 0.229, 2.12,0.0451]);
-Psi = (m-d-1)*4*eye(d);
-alp=1; gam=1;
-parfor datai=1:12
-
-    filename = ['..\data\GVHD\FCM\' num2str(datai,'%.3d') '.csv']
-    labelname = ['..\data\GVHD\labels\' num2str(datai,'%.3d') '.csv']
-    X=dlmread(filename,',',2);
-    
-    Y=dlmread(labelname,',',2);
-    prefix = char(strcat(folder,'/GVHD/'));
+for datai=1:30
+    X=X_all(G_all==datai,:);
+    Y=Y_all(G_all==datai);
+    prefix = char(strcat(folder,'/NDD/'));
     mkdir([prefix,'\plots\']);
     X=igmm_normalize(X,32,false);
-    mu0=mean(X,1);
     
-
+    d=size(X,2);
+    k0=0.1;
+    ki=0.8;
+    m=150*d+2;
+    mu0=mean(X,1);
+    Psi=4*(m-d-1)*eye(d);%*diag([1 1 0.1 0.1 0.1]);
+    alp=1; gam=1;
 
     fprintf(1,'Writing files...\n');
     i2gmm_createBinaryFiles(char(strcat(prefix  , num2str(datai))),X,Psi,mu0,m,k0,ki,alp,gam);
@@ -44,8 +30,8 @@ parfor datai=1:12
     
     %writeMat(data,X,'double');
 
-    num_sweeps = '1600';
-    burn_in='1200';
+    num_sweeps = '2000';
+    burn_in='1600';
     step='10';
     fprintf(1,'I2GMM is running...\n');
     cmd = ['i2s.exe ',data,' ',meanpath,' ',psipath,' ',params,' ',num_sweeps,' ', burn_in,' ',step];
@@ -56,9 +42,9 @@ parfor datai=1:12
     slabels=readMat(char(strcat(prefix ,num2str(datai),'.matrix.superlabels')))+1;
     labels=readMat(char(strcat(prefix ,num2str(datai),'.matrix.labels')))+1;
     alabels = align_labels(slabels');
-    f1s{datai}=evaluationTable(Y(Y~=0),alabels(Y~=0))
-    macf1(datai) = table2array(f1s{datai}(1,1))
-    micf1(datai) = table2array(f1s{datai}(1,2))
+    f1s=evaluationTable(Y(Y~=0),alabels(Y~=0))
+    macf1(datai) = table2array(f1s(1,1))
+    micf1(datai) = table2array(f1s(1,2))
     clf;
     subplot(2,1,1);
     scatter(X(:,1),X(:,2),10,1+Y);
@@ -66,5 +52,5 @@ parfor datai=1:12
     subplot(2,1,2);
     plotHierarchicalData(X,alabels',alabels');
 end
-metadata(trial,:) = [k0,ki,m,diag(Psi)'/(m-d-1),mean(macf1),mean(micf1),mean(elapsed)];
-end
+mean(macf1)
+mean(micf1)
