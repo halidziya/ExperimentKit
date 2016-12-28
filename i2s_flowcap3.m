@@ -1,7 +1,7 @@
 experiments='experiments/';
 folder = strcat(experiments,'parallel');
 igmm_mkdir(folder);
-load('..\data\flowcapIII_all.mat')
+load('../data/flowcapIII_all.mat')
 prefix = char(strcat(folder,'/Flowcap/i'));
 mkdir([prefix,'\plots\']);
 X=igmm_normalize(X,20,true);
@@ -29,7 +29,7 @@ X=igmm_normalize(X,20,true);
     burn_in='1600';
     step='10';
     fprintf(1,'I2GMM is running...\n');
-    cmd = ['i2s.exe ',data,' ',meanpath,' ',psipath,' ',params,' ',num_sweeps,' ', burn_in,' ',step];
+    cmd = ['i2slice ',data,' ',meanpath,' ',psipath,' ',params,' ',num_sweeps,' ', burn_in,' ',step];
     tic;
     system(cmd);
     elapsed = toc;
