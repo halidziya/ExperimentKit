@@ -1,0 +1,9 @@
+#PBS -N i2s_matlab
+#PBS -l nodes=2:ppn=4:gpus=1,mem=24000m,walltime=32:00:00
+#PBS -M hzyereba
+#PBS -q gpu
+module swap gcc/5.3.0
+gcc --version
+cd ~/ExperimentKit
+./i2slice experiments/parallel/Flowcap/i.matrix experiments/parallel/Flowcap/i_mean.matrix experiments/parallel/Flowcap/i_psi.matrix experiments/parallel/Flowcap/i_params.matrix
+quit
