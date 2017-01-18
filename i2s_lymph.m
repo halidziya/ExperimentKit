@@ -18,10 +18,10 @@ parfor datai=1:30
     m=d+2;
     mu0=mean(X,1);
     klabs = kmeans(X,10);
-    Psi=1*(m-d-1)*eye(d);%*diag([1 1 0.1 0.1 0.1]);
-    for i=1:10
-        Psi = Psi + cov(X(klabs==i,:));
-    end
+    Psi=5*(m-d-1)*eye(d);%*diag([1 1 0.1 0.1 0.1]);
+%     for i=1:10
+%         Psi = Psi + cov(X(klabs==i,:));
+%     end
     
     alp=1; gam=1;
 
@@ -40,7 +40,7 @@ parfor datai=1:30
     burn_in='1600';
     step='10';
     fprintf(1,'I2GMM is running...\n');
-    cmd = ['i2s.exe ',data,' ',meanpath,' ',psipath,' ',params,' ',num_sweeps,' ', burn_in,' ',step];
+    cmd = ['i2gmm.exe ',data,' ',meanpath,' ',psipath,' ',params,' ',num_sweeps,' ', burn_in,' ',step];
     tic;
     system(cmd);
     elapsed(datai) = toc;
