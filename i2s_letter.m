@@ -2,7 +2,7 @@ experiments='experiments/';
 folder = strcat(experiments,'parallel');
 igmm_mkdir(folder);
 run('..\data\letter\readData.m')
-prefix = char(strcat(folder,'/letter/i'));
+prefix = char(strcat(folder,'/letter/'));
 mkdir([prefix,'\plots\']);
 X=igmm_normalize(X,20,true);
 
@@ -19,8 +19,7 @@ X=igmm_normalize(X,20,true);
 
     
     data=char(strcat(prefix,'.matrix'));
-    psipath=char(strcat(prefix,'_psi.matrix'));
-    meanpath=char(strcat(prefix,'_mean.matrix'));
+    pripath=char(strcat(prefix,'_NIWprior.matrix'));
     params=char(strcat(prefix,'_params.matrix'));
     
     %writeMat(data,X,'double');
@@ -29,21 +28,14 @@ X=igmm_normalize(X,20,true);
     burn_in='1600';
     step='10';
     fprintf(1,'I2GMM is running...\n');
-    cmd = ['i2s.exe ',data,' ',meanpath,' ',psipath,' ',params,' ',num_sweeps,' ', burn_in,' ',step];
+    cmd = ['i2s.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',prefix];
     tic;
     system(cmd);
     elapsed = toc;
     %[dishes rests likelihood labels]=i2gmm_readOutput('./');
-    slabels=readMat(char(strcat(prefix ,'.matrix.superlabels')))+1;
-    labels=readMat(char(strcat(prefix ,'.matrix.labels')))+1;
-%    macs=[];
-%     for i=1:51; at=evaluationTable(Y(Y~=0),labels(Y~=0,i));macs(i)=table2array(at(1,1));end
-%     SC =[ SC ; [likelihood(801:4:1002),macs']];
-     labels = align_labels(slabels');
-
-    %slabels=readMat(char(strcat(prefix ,'.matrix.superlabels')))+1;
+    slabels=readMat(char(strcat(prefix ,'Labels.matrix')))+1;
     %labels=readMat(char(strcat(prefix ,'.matrix.labels')))+1;
-    %alabels = align_labels(slabels');
+    labels = align_labels(slabels');
     f1s=evaluationTable(Y(Y~=0),labels(Y~=0))
     macf1 = table2array(f1s(1,1))
     clf;
@@ -53,4 +45,6 @@ X=igmm_normalize(X,20,true);
     subplot(2,1,2);
     scatter(X(:,1),X(:,2),10,labels);
 
-mean(macf1)
+
+fprintf(1,'%.3f\n',mean(macf1))
+fprintf(1,'%.1f\n',elapsed)

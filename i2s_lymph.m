@@ -14,10 +14,15 @@ parfor datai=1:30
     
     d=size(X,2);
     k0=0.05;
-    ki=0.5;
+    ki=0.4;
     m=d+2;
     mu0=mean(X,1);
+    klabs = kmeans(X,10);
     Psi=1*(m-d-1)*eye(d);%*diag([1 1 0.1 0.1 0.1]);
+    for i=1:10
+        Psi = Psi + cov(X(klabs==i,:));
+    end
+    
     alp=1; gam=1;
 
     fprintf(1,'Writing files...\n');
@@ -41,6 +46,7 @@ parfor datai=1:30
     elapsed(datai) = toc;
 
     slabels=readMat(char(strcat(prefix ,num2str(datai),'.matrix.superlabels')))+1;
+    slabels(1,:) = [];
     labels=readMat(char(strcat(prefix ,num2str(datai),'.matrix.labels')))+1;
     alabels = align_labels(slabels');
     f1s=evaluationTable(Y(Y~=0),alabels(Y~=0))

@@ -4,7 +4,7 @@ igmm_mkdir(folder);
 run('..\data\a053\readData.m')
 prefix = char(strcat(folder,'/a053/a'));
 mkdir([prefix,'\plots\']);
-X=igmm_normalize(X,10,true);
+X=igmm_normalize(X,6,true);
 %X=X(Y~=0,:);
 %Y=Y(Y~=0);
 
@@ -13,7 +13,7 @@ X=igmm_normalize(X,10,true);
     ki=1;
     m=d+2;
     mu0=mean(X,1);
-    Psi=(m-d-1)*eye(d)/10;%*diag([1 1 0.1 0.1 0.1]);
+    Psi=(m-d-1)*eye(d)*10;%*diag([1 1 0.1 0.1 0.1]);
     alp=1; gam=1;
 
     fprintf(1,'Writing files...\n');
@@ -21,8 +21,7 @@ X=igmm_normalize(X,10,true);
 
     
     data=char(strcat(prefix,'.matrix'));
-    psipath=char(strcat(prefix,'_psi.matrix'));
-    meanpath=char(strcat(prefix,'_mean.matrix'));
+    psipath=char(strcat(prefix,'_NIWprior.matrix'));
     params=char(strcat(prefix,'_params.matrix'));
     
     %writeMat(data,X,'double');
@@ -31,7 +30,7 @@ X=igmm_normalize(X,10,true);
     burn_in='1600';
     step='10';
     fprintf(1,'I2GMM is running...\n');
-    cmd = ['i2s.exe ',data,' ',meanpath,' ',psipath,' ',params,' ',num_sweeps,' ', burn_in,' ',step];
+    cmd = ['i2s.exe ',data,' ',psipath,' ',params,' ',num_sweeps,' ', burn_in,' ',step];
     tic;
     system(cmd);
     elapsed = toc;
