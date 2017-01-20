@@ -7,7 +7,7 @@ mkdir([prefix,'\plots\']);
 X=igmm_normalize(X,20,true);
 
     d=size(X,2);
-    k0=0.05;+
+    k0=0.05;
     ki=0.5;
     m=d+2;
     mu0=mean(X,1);
@@ -28,7 +28,7 @@ X=igmm_normalize(X,20,true);
     burn_in='1600';
     step='10';
     fprintf(1,'I2GMM is running...\n');
-    cmd = ['i2gmm.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',prefix];
+    cmd = ['i2s.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',prefix ];
     tic;
     system(cmd);
     elapsed = toc;

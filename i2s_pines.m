@@ -2,16 +2,16 @@ experiments='experiments/';
 folder = strcat(experiments,'parallel');
 igmm_mkdir(folder);
 run('..\data\pines\readData.m')
-prefix = char(strcat(folder,'/Indian/i'));
+prefix = char(strcat(folder,'/Indian/pines'));
 mkdir([prefix,'\plots\']);
-X=igmm_normalize(X,12,true);
+Xorg = X;
+X=igmm_normalize(X,20,true);
 
     d=size(X,2);
     k0=0.05;
     ki=0.5;
     m=d+2;
     mu0=mean(X,1);
-    klabs = kmeans(X,10);
     Psi=1*(m-d-1)*eye(d);%*diag([1 1 0.1 0.1 0.1]);
 %     for i=1:10
 %         Psi = Psi + cov(X(klabs==i,:));
@@ -29,20 +29,20 @@ X=igmm_normalize(X,12,true);
     
     %writeMat(data,X,'double');
 
-    num_sweeps = '2000';
-    burn_in='1600';
-    step='10';
+    num_sweeps = '1500';
+    burn_in='1000';
     fprintf(1,'I2GMM is running...\n');
-    cmd = ['i2gmm.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',step];
+    cmd = ['i2s.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',prefix];
     tic;
     
     
     %labels = kmeans(X,length(unique(Y(Y~=0))));
     system(cmd);
     %[dishes rests likelihood labels]=i2gmm_readOutput('./');
-    slabels=readMat(char('10Labels.matrix'))+1;
-    %labels=readMat(char(strcat(prefix ,'.matrix.labels')))+1;
-    slabels(isnan(slabels))=1
+    slabels=readMat(char(strcat(prefix,'Labels.matrix')))+1;
+    %sublabels=readMat(char(strcat(prefix ,'Sublabels.matrix')))+1;
+    slabels(isnan(slabels))=0;
+    %slabels(1,:)=[];
     labels = align_labels(slabels');
     
     
@@ -51,6 +51,9 @@ X=igmm_normalize(X,12,true);
     %slabels=readMat(char(strcat(prefix ,'.matrix.superlabels')))+1;
     %labels=readMat(char(strcat(prefix ,'.matrix.labels')))+1;
     %alabels = align_labels(slabels');
+    % gmd=gmdistribution.fit(X,26,'Regularize',0.1)
+    % evaluationTable(Y,gmd.cluster(X))
+    
     f1s=evaluationTable(Y(Y~=0),labels(Y~=0))
     macf1 = table2array(f1s(1,1))
     micf1 = table2array(f1s(1,2))
