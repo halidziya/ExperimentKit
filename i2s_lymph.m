@@ -35,11 +35,11 @@ parfor datai=1:30
     
     %writeMat(data,X,'double');
      tic;
-    num_sweeps = '1000';
-    burn_in='600';
+    num_sweeps = '2000';
+    burn_in='1600';
     step='10';
     fprintf(1,'I2GMM is running...\n');
-    cmd = ['i2s.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',strcat(prefix,num2str(datai))];
+    cmd = ['i2s.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',strcat(prefix,num2str(datai)),' 50'];
 
     system(cmd);
 

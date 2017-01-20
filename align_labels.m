@@ -12,7 +12,7 @@ for i=1:nsample
     end
 end
 [a b]=sort(mean(f1agg),'descend');
-nselect = ceil(nsample);
+nselect = ceil(nsample*0.9);
 labels = labels(:,b(1:nselect));
 nsample = size(labels,2);
 

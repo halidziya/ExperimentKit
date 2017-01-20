@@ -26,9 +26,8 @@ X=igmm_normalize(X,20,true);
 
     num_sweeps = '2000';
     burn_in='1600';
-    step='10';
     fprintf(1,'I2GMM is running...\n');
-    cmd = ['i2s.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',prefix ];
+    cmd = ['igmm.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',prefix,' 50'];
     tic;
     system(cmd);
     elapsed = toc;
