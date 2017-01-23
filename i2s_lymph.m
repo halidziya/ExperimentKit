@@ -3,7 +3,7 @@ folder = strcat(experiments,'parallel');
 igmm_mkdir(folder);
 macf1=[];
 micf1=[];
-parfor datai=1:30
+for datai=1:30
     filename = ['..\data\Lymph\data\' num2str(datai,'%.3d') '.csv']
     labelname = ['..\data\Lymph\labels\' num2str(datai,'%.3d') '.csv']
     X=dlmread(filename,',',2);
@@ -18,7 +18,7 @@ parfor datai=1:30
     m=d+2;
     mu0=mean(X,1);
     
-    Psi=1*(m-d-1)*eye(d);%*diag([1 1 0.1 0.1 0.1]);
+    Psi=(m-d-1)*eye(d);%*diag([1 1 0.1 0.1 0.1]);
 %     for i=1:10
 %         Psi = Psi + cov(X(klabs==i,:));
 %     end
@@ -39,7 +39,7 @@ parfor datai=1:30
     burn_in='1600';
     step='10';
     fprintf(1,'I2GMM is running...\n');
-    cmd = ['i2s.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',strcat(prefix,num2str(datai)),' 50'];
+    cmd = ['i2gmm.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',strcat(prefix,num2str(datai)),' 20'];
 
     system(cmd);
 

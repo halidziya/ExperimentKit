@@ -1,7 +1,7 @@
 experiments='experiments/';
 folder = strcat(experiments,'parallel');
 igmm_mkdir(folder);
-run('..\data\pines\readData.m')
+run('..\data\crism\readData.m')
 prefix = char(strcat(folder,'/Indian/pines'));
 mkdir([prefix,'\plots\']);
 Xorg = X;
@@ -17,7 +17,7 @@ X=igmm_normalize(X,20,true);
 %         Psi = Psi + cov(X(klabs==i,:));
 %     end
     
-    alp=0.01; gam=1;
+    alp=1; gam=1;
 
     fprintf(1,'Writing files...\n');
     i2gmm_createBinaryFiles(prefix,X,Psi,mu0,m,k0,ki,alp,gam);

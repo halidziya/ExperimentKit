@@ -16,7 +16,7 @@ X=igmm_normalize(X,20,true);
 %         Psi = Psi + cov(X(klabs==i,:));
 %     end
     
-    alp=1; gam=1;
+    alp=0.1; gam=1;
 
     fprintf(1,'Writing files...\n');
     i2gmm_createBinaryFiles(prefix,X,Psi,mu0,m,k0,ki,alp,gam);
@@ -31,7 +31,7 @@ X=igmm_normalize(X,20,true);
     num_sweeps = '2000';
     burn_in='1600';
     fprintf(1,'I2GMM is running...\n');
-    cmd = ['i2s.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',prefix,' 40'];
+    cmd = ['i2s.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',prefix,' 20'];
     tic;
     %labels = kmeans(X,length(unique(Y(Y~=0))));
     system(cmd);
@@ -42,9 +42,6 @@ X=igmm_normalize(X,20,true);
     slabels(isnan(slabels))=0;
     labels = align_labels(slabels');
     
-    
-    
-
     %slabels=readMat(char(strcat(prefix ,'.matrix.superlabels')))+1;
     %labels=readMat(char(strcat(prefix ,'.matrix.labels')))+1;
     %alabels = align_labels(slabels');
@@ -55,9 +52,10 @@ X=igmm_normalize(X,20,true);
     macf1 = table2array(f1s(1,1))
     micf1 = table2array(f1s(1,2))
     clf;
+    colormap summer;
     subplot(2,1,1);
-    scatter(X(:,1),X(:,2),10,1+Y);
-    colormap hsv;
+    scatter(X(:,1),X(:,2),10,Y);
+    
     subplot(2,1,2);
     scatter(X(:,1),X(:,2),10,labels);
 
