@@ -3,7 +3,8 @@ folder = strcat(experiments,'parallel');
 igmm_mkdir(folder);
 macf1=[];
 micf1=[];
-for datai=1:30
+for rep=1:10
+parfor datai=1:30
     filename = ['..\data\Lymph\data\' num2str(datai,'%.3d') '.csv']
     labelname = ['..\data\Lymph\labels\' num2str(datai,'%.3d') '.csv']
     X=dlmread(filename,',',2);
@@ -23,7 +24,7 @@ for datai=1:30
 %         Psi = Psi + cov(X(klabs==i,:));
 %     end
     
-    alp=1; gam=1;
+    alp=0.1; gam=1;
 
     fprintf(1,'Writing files...\n');
     i2gmm_createBinaryFiles(char(strcat(prefix  , num2str(datai))),X,Psi,mu0,m,k0,ki,alp,gam);
@@ -39,7 +40,7 @@ for datai=1:30
     burn_in='1600';
     step='10';
     fprintf(1,'I2GMM is running...\n');
-    cmd = ['i2gmm.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',strcat(prefix,num2str(datai)),' 20'];
+    cmd = ['i2s.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',strcat(prefix,num2str(datai)),' 20'];
 
     system(cmd);
 
@@ -68,8 +69,10 @@ for datai=1:30
     subplot(2,1,2);
     %plotHierarchicalData(X,alabels',alabels');
 end
-mean(macf1)
-mean(micf1)
+macsf1(rep)=mean(macf1);
+elapses(rep)=mean(elapsed);
+end
 
-fprintf(1,'%.3f\n',mean(macf1))
-fprintf(1,'%.1f\n',mean(elapsed))
+
+fprintf(1,'%.3f\n',mean(macsf1))
+fprintf(1,'%.1f\n',mean(elapses))
