@@ -1,9 +1,9 @@
 experiments='experiments/';
 folder = strcat(experiments,'parallel');
 igmm_mkdir(folder);
-run('..\data\seeds\readData.m')
+run('../data/seeds/readData.m')
 prefix = char(strcat(folder,'/seeds/i'));
-mkdir([prefix,'\plots\']);
+mkdir([prefix,'/plots/']);
 X=igmm_normalize(X,20,true);
 
     d=size(X,2);
@@ -29,7 +29,7 @@ X=igmm_normalize(X,20,true);
     burn_in='1600';
     step='10';
     fprintf(1,'I2GMM is running...\n');
-    cmd = ['i2s.exe ',data,' ',meanpath,' ',psipath,' ',params,' ',num_sweeps,' ', burn_in,' ',step];
+    cmd = ['./i2slice ',data,' ',meanpath,' ',psipath,' ',params,' ',num_sweeps,' ', burn_in,' ',step];
     tic;
     system(cmd);
     elapsed = toc;
