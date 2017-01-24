@@ -2,24 +2,26 @@ experiments='experiments/';
 folder = strcat(experiments,'parallel');
 igmm_mkdir(folder);
 
-
+[a,b,c,d,e,f]= ndgrid([5],[5],[5],[5],[5],[5])
+mgrid =  [a(:),b(:),c(:),d(:),e(:),f(:)]
 metadata = [];
-for trial=1:60  
+parfor trial=1:size(mgrid,1)
 macf1=[];
 micf1=[];
 f1s = {};
 d =6;
-k0=0.1;
-ki=0.8;
+k0=0.05;
+ki=0.4;
 %m=150*d;
-m=5*trial*d+2;%398;%d+2+randi(100,1)*d;
+m=d+2;%398;%d+2+randi(100,1)*d;
 
 %Psi=diag([0.6 0.6 0.3 0.3 0.3 0.3])*(m-d-1);
 %Psi=(m-d-1)*diag([5*rand(d,1)]);
+Psi=(m-d-1)*eye(d)*5;
 %Psi=(m-d-1)*diag([3.66 , 3.65, 4.79, 0.229, 2.12,0.0451]);
-Psi = (m-d-1)*4*eye(d);
+%Psi = (m-d-1)*diag(mgrid(trial,:));
 alp=1; gam=1;
-parfor datai=1:12
+for datai=1:12
 
     filename = ['..\data\GVHD\FCM\' num2str(datai,'%.3d') '.csv']
     labelname = ['..\data\GVHD\labels\' num2str(datai,'%.3d') '.csv']
@@ -29,6 +31,7 @@ parfor datai=1:12
     prefix = char(strcat(folder,'/GVHD/'));
     mkdir([prefix,'\plots\']);
     X=igmm_normalize(X,32,false);
+    %X=X(:,1:2);
     mu0=mean(X,1);
     
 
@@ -51,7 +54,7 @@ parfor datai=1:12
     cmd = ['i2s.exe ',data,' ',meanpath,' ',psipath,' ',params,' ',num_sweeps,' ', burn_in,' ',step];
     tic;
     system(cmd);
-    elapsed(datai) = toc;
+    %elapsed(datai) = toc;
 
     slabels=readMat(char(strcat(prefix ,num2str(datai),'.matrix.superlabels')))+1;
     labels=readMat(char(strcat(prefix ,num2str(datai),'.matrix.labels')))+1;

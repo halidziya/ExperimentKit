@@ -12,11 +12,11 @@ for datai=1:30
     X=igmm_normalize(X,32,false);
     
     d=size(X,2);
-    k0=0.1;
+    k0=0.15;
     ki=0.8;
     m=150*d+2;
     mu0=mean(X,1);
-    Psi=4*(m-d-1)*eye(d);%*diag([1 1 0.1 0.1 0.1]);
+    Psi=0.3*(m-d-1)*eye(d);%*diag([1 1 0.1 0.1 0.1]);
     alp=1; gam=1;
 
     fprintf(1,'Writing files...\n');

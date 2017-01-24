@@ -1,10 +1,9 @@
 experiments='experiments/';
 folder = strcat(experiments,'parallel');
 igmm_mkdir(folder);
-run('..\data\pines\readData.m')
-prefix = char(strcat(folder,'/Indian/pines'));
+run('..\data\kddpaper\readData.m')
+prefix = char(strcat(folder,'/seeds/i'));
 mkdir([prefix,'\plots\']);
-Xorg = X;
 X=igmm_normalize(X,20,true);
 
     d=size(X,2);
@@ -12,12 +11,12 @@ X=igmm_normalize(X,20,true);
     ki=0.5;
     m=d+2;
     mu0=mean(X,1);
-    Psi=(m-d-1)*eye(d);%*diag([1 1 0.1 0.1 0.1]);
+    Psi=1*(m-d-1)*eye(d);%*diag([1 1 0.1 0.1 0.1]);
 %     for i=1:10
 %         Psi = Psi + cov(X(klabs==i,:));
 %     end
     
-    alp=0.01; gam=1;
+    alp=1; gam=1;
 
     fprintf(1,'Writing files...\n');
     i2gmm_createBinaryFiles(prefix,X,Psi,mu0,m,k0,ki,alp,gam);
@@ -34,20 +33,15 @@ X=igmm_normalize(X,20,true);
     fprintf(1,'I2GMM is running...\n');
     cmd = ['i2s.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',prefix,' 20'];
     tic;
-    
-    
     %labels = kmeans(X,length(unique(Y(Y~=0))));
     system(cmd);
+    elapsed = toc;
     %[dishes rests likelihood labels]=i2gmm_readOutput('./');
     slabels=readMat(char(strcat(prefix,'Labels.matrix')))+1;
     %sublabels=readMat(char(strcat(prefix ,'Sublabels.matrix')))+1;
     slabels(isnan(slabels))=0;
-    %slabels(1,:)=[];
     labels = align_labels(slabels');
     
-    
-    elapsed = toc;
-
     %slabels=readMat(char(strcat(prefix ,'.matrix.superlabels')))+1;
     %labels=readMat(char(strcat(prefix ,'.matrix.labels')))+1;
     %alabels = align_labels(slabels');
@@ -66,3 +60,24 @@ X=igmm_normalize(X,20,true);
 
 fprintf(1,'%.3f\n',mean(macf1));
 fprintf(1,'%.2f\n',elapsed);
+
+% f1s = []
+% obf=[]
+% for i=1:size(slabels,1)
+%     obf(i) = 0
+%     for j=1:size(unique(slabels(i,:)),1)
+%         at = fitcsvm(X,slabels(i,:)==j)
+%         obf(i) = obf(i)  + at.ConvergenceInfo.Objective
+%     end
+%     %obf(i) = obf(i)/j
+%     at = evaluationTable(Y(Y~=0),slabels(i,:))
+%     f1s(i)=table2array(at(1,1))
+% end
+%  plot(obf,f1s,'.')
+
+for i=1:max(labels)
+    %at = unique(words(labels==i),'stable');
+    used=tabulate(words(labels==i));
+    [val at]=sort([used{:,3}],'descend');
+    fprintf(1,'%s\n',strjoin(used(at(1:10)),','));
+end
