@@ -9,7 +9,7 @@ parfor datai=1:30
     labelname = ['..\data\Lymph\labels\' num2str(datai,'%.3d') '.csv']
     X=dlmread(filename,',',2);
     Y=dlmread(labelname,',',2);
-    prefix = char(strcat(folder,'/Lymph/i'));
+    prefix = char(strcat(folder,'/Lymph/i2s_'));
     mkdir([prefix,'\plots\']);
     X=igmm_normalize(X,20,false);
     
@@ -35,10 +35,10 @@ parfor datai=1:30
     
     %writeMat(data,X,'double');
      tic;
-    burn_in='300';
-    num_sweeps = '500';
+    burn_in='1600';
+    num_sweeps = '2000';
     fprintf(1,'I2GMM is running...\n');
-    cmd = ['i2gmm.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',strcat(prefix,num2str(datai)),' 20'];
+    cmd = ['i2s.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',strcat(prefix,num2str(datai)),' 20'];
 
     system(cmd);
     elapsed(datai) = toc;
@@ -72,7 +72,7 @@ macsf1(rep)=mean(macf1);
 elapses(rep)=mean(elapsed);
 end
 
-fprintf(1,'%s\n','Lymph k1=0.5')
+fprintf(1,'%s\n','Lymph i2s k1=0.5')
 fprintf(1,'%.3f\n',mean(macf1))
 fprintf(1,'%.3f\n',std(macf1))
 fprintf(1,'%.1f\n',mean(elapsed))
