@@ -1,9 +1,14 @@
 #PBS -N i2s_matlab
-#PBS -l nodes=2:ppn=4:gpus=1,mem=24000m,walltime=32:00:00
+#PBS -l nodes=1:ppn=32,mem=64gb,walltime=80:00:00
 #PBS -M hzyereba
-#PBS -q gpu
+###PBS -q normal
 module swap gcc/5.3.0
 gcc --version
 cd ~/ExperimentKit
-./i2slice experiments/parallel/Flowcap/i.matrix experiments/parallel/Flowcap/i_mean.matrix experiments/parallel/Flowcap/i_psi.matrix experiments/parallel/Flowcap/i_params.matrix
-quit
+###module load matlab
+export LD_LIBRARY_PATH=/opt/gcc/5.3.0/snos/lib64
+module load matlab
+aprun matlab -r i2s_flow
+###date >> done.txt
+###aprun ./i2slice experiments/parallel/Flowcap/i.matrix experiments/parallel/Flowcap/i_mean.matrix experiments/parallel/Flowcap/i_psi.matrix experiments/parallel/Flowcap/i_params.matrix
+###date >> done.txt

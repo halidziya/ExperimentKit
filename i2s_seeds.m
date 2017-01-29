@@ -1,9 +1,9 @@
 experiments='experiments/';
 folder = strcat(experiments,'parallel');
 igmm_mkdir(folder);
-run('..\data\seeds\readData.m')
+run('../data/seeds/readData.m')
 prefix = char(strcat(folder,'/seeds/i'));
-mkdir([prefix,'\plots\']);
+mkdir([prefix,'/plots/']);
 X=igmm_normalize(X,20,true);
 
     d=size(X,2);
