@@ -8,7 +8,7 @@ X=igmm_normalize(X,20,true);
 
     d=size(X,2);
     k0=0.05;
-    ki=0.5;
+    ki=0.4;
     m=d+2;
     mu0=mean(X,1);
     Psi=1*(m-d-1)*eye(d);%*diag([1 1 0.1 0.1 0.1]);

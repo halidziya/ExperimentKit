@@ -9,7 +9,7 @@ parfor datai=1:30
     labelname = ['..\data\Lymph\labels\' num2str(datai,'%.3d') '.csv']
     X=dlmread(filename,',',2);
     Y=dlmread(labelname,',',2);
-    prefix = char(strcat(folder,'/Lymph/'));
+    prefix = char(strcat(folder,'/Lymph/i'));
     mkdir([prefix,'\plots\']);
     X=igmm_normalize(X,20,false);
     
@@ -18,13 +18,12 @@ parfor datai=1:30
     ki=0.5;
     m=d+2;
     mu0=mean(X,1);
-    
+    alp=1; gam=1;
     Psi=(m-d-1)*eye(d);%*diag([1 1 0.1 0.1 0.1]);
 %     for i=1:10
 %         Psi = Psi + cov(X(klabs==i,:));
 %     end
     
-    alp=0.1; gam=1;
 
     fprintf(1,'Writing files...\n');
     i2gmm_createBinaryFiles(char(strcat(prefix  , num2str(datai))),X,Psi,mu0,m,k0,ki,alp,gam);
@@ -36,21 +35,21 @@ parfor datai=1:30
     
     %writeMat(data,X,'double');
      tic;
-    num_sweeps = '2000';
-    burn_in='1600';
-    step='10';
+    burn_in='300';
+    num_sweeps = '500';
     fprintf(1,'I2GMM is running...\n');
-    cmd = ['i2s.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',strcat(prefix,num2str(datai)),' 20'];
+    cmd = ['i2gmm.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',strcat(prefix,num2str(datai)),' 20'];
 
     system(cmd);
-
+    elapsed(datai) = toc;
+    
     slabels=readMat(char(strcat(prefix ,num2str(datai),'Labels.matrix')))+1;
-    %slabels(1,:) = [];
     %labels=readMat(char(strcat(prefix ,num2str(datai),'.matrix.labels')))+1;
     alabels = align_labels(slabels');
-    elapsed(datai) = toc;
-%     alabels = kmeans(X,length(unique(Y)));
-
+    
+    %alabels = kmeans(X,length(unique(Y)));
+   
+    
 %     tic;
 %     gmd=gmdistribution.fit(X,length(unique(Y)),'Regularize',0.01);
 %     elapsed(datai)= toc;
@@ -73,6 +72,8 @@ macsf1(rep)=mean(macf1);
 elapses(rep)=mean(elapsed);
 end
 
-
-fprintf(1,'%.3f\n',mean(macsf1))
-fprintf(1,'%.1f\n',mean(elapses))
+fprintf(1,'%s\n','Lymph k1=0.5')
+fprintf(1,'%.3f\n',mean(macf1))
+fprintf(1,'%.3f\n',std(macf1))
+fprintf(1,'%.1f\n',mean(elapsed))
+fprintf(1,'%.3f\n',std(elapsed))
