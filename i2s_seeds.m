@@ -8,7 +8,7 @@ X=igmm_normalize(X,20,true);
 
     d=size(X,2);
     k0=0.05;
-    ki=0.4;
+    ki=0.5;
     m=d+2;
     mu0=mean(X,1);
     Psi=1*(m-d-1)*eye(d);%*diag([1 1 0.1 0.1 0.1]);
@@ -16,7 +16,7 @@ X=igmm_normalize(X,20,true);
 %         Psi = Psi + cov(X(klabs==i,:));
 %     end
     
-    alp=0.1; gam=1;
+    alp=1; gam=1;
 
     fprintf(1,'Writing files...\n');
     i2gmm_createBinaryFiles(prefix,X,Psi,mu0,m,k0,ki,alp,gam);

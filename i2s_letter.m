@@ -5,7 +5,7 @@ run('..\data\letter\readData.m')
 
 X=igmm_normalize(X,20,true);
 
-parfor rep=1:10
+for rep=1:10
     prefix = char(strcat(folder,'/letter/' , num2str(rep) ));
     mkdir([prefix,'\plots\']);
 

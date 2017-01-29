@@ -3,7 +3,8 @@ folder = strcat(experiments,'parallel');
 igmm_mkdir(folder);
 macf1=[];
 micf1=[];
-for rep=1:10
+exname = 'i2s alp=0.1';
+for rep=1:1
 parfor datai=1:30
     filename = ['..\data\Lymph\data\' num2str(datai,'%.3d') '.csv']
     labelname = ['..\data\Lymph\labels\' num2str(datai,'%.3d') '.csv']
@@ -35,7 +36,7 @@ parfor datai=1:30
     
     %writeMat(data,X,'double');
      tic;
-    burn_in='1600';
+    burn_in='1500';
     num_sweeps = '2000';
     fprintf(1,'I2GMM is running...\n');
     cmd = ['i2s.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',strcat(prefix,num2str(datai)),' 20'];
@@ -72,8 +73,8 @@ macsf1(rep)=mean(macf1);
 elapses(rep)=mean(elapsed);
 end
 
-fprintf(1,'%s\n','Lymph i2s k1=0.5')
-fprintf(1,'%.3f\n',mean(macf1))
+fprintf(1,exname)
+fprintf(1,'\n%.3f\n',mean(macf1))
 fprintf(1,'%.3f\n',std(macf1))
 fprintf(1,'%.1f\n',mean(elapsed))
 fprintf(1,'%.3f\n',std(elapsed))
