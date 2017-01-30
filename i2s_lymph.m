@@ -75,6 +75,6 @@ end
 
 fprintf(1,exname)
 fprintf(1,'\n%.3f\n',mean(macf1))
-fprintf(1,'%.3f\n',std(macf1))
+fprintf(1,'%.2f\n',std(macf1))
 fprintf(1,'%.1f\n',mean(elapsed))
 fprintf(1,'%.3f\n',std(elapsed))

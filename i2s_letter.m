@@ -27,18 +27,22 @@ for rep=1:10
     
     %writeMat(data,X,'double');
 
-    num_sweeps = '2000';
-    burn_in='1600';
+    num_sweeps = '1500';
+    burn_in='1000';
     fprintf(1,'I2GMM is running...\n');
-    cmd = ['i2s.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',prefix,' 20'];
+    cmd = ['igmm.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',prefix,' 20'];
     tic;
     system(cmd);
     elapsed(rep) = toc;
-    %[dishes rests likelihood labels]=i2gmm_readOutput('./');
     slabels=readMat(char(strcat(prefix ,'Labels.matrix')))+1;
     %labels=readMat(char(strcat(prefix ,'.matrix.labels')))+1;
     labels = align_labels(slabels');
+    %    labels = kmeans(X,length(unique(Y)));
+    % gmd=gmdistribution.fit(X,length(unique(Y)),'Regularize',0.01);
+    % labels = gmd.cluster(X);
+    % elapsed(rep) = toc;
     f1s=evaluationTable(Y(Y~=0),labels(Y~=0))
+    
     macf1(rep) = table2array(f1s(1,1))
     clf;
     subplot(2,1,1);
@@ -48,7 +52,7 @@ for rep=1:10
     scatter(X(:,1),X(:,2),10,labels);
 
 end
-%fprintf(1,'%s\n',cmd)
+fprintf(1,'%s\n',cmd)
 fprintf(1,'%.3f\n',mean(macf1))
-fprintf(1,'%.3f\n',std(macf1))
+fprintf(1,'%.2f\n',std(macf1))
 fprintf(1,'%.1f\n',mean(elapsed))
