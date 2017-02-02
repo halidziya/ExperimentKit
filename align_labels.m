@@ -15,14 +15,18 @@ end
 nselect = ceil(nsample*0.9);
 labels = labels(:,b(1:nselect));
 nsample = size(labels,2);
-
+maxlabels = max(max(labels));
     n = size(labels,1); % Each column is a sampled labels
+    try
     for i=1:nsample % First One is the reference
-        cfm=confusionmat(labels(:,1),labels(:,i));
+        cfm=confusionmat(labels(:,1),labels(:,i),'order',1:maxlabels);
         cost = n - cfm;
         allignment = munkres(cost);
         [sorted inverseal]=sort(allignment);
         labels(:,i)=inverseal(labels(:,i));
     end
+    catch
+        keyboard
+    end 
     best = mode(labels,2);  
 end

@@ -30,7 +30,7 @@ for rep=1:10
     num_sweeps = '1500';
     burn_in='1000';
     fprintf(1,'I2GMM is running...\n');
-    cmd = ['igmm.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',prefix,' 20'];
+    cmd = ['i2s.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',prefix,' 20'];
     tic;
     system(cmd);
     elapsed(rep) = toc;

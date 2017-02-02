@@ -15,7 +15,7 @@ for rep=1:10
     ki=0.5;
     m=d+2;
     mu0=mean(X,1);
-    Psi=(m-d-1)*eye(d);%*diag([1 1 0.1 0.1 0.1]);
+    Psi=eye(d);%*diag([1 1 0.1 0.1 0.1]);
 %     for i=1:10
 %         Psi = Psi + cov(X(klabs==i,:));
 %     end
@@ -32,10 +32,11 @@ for rep=1:10
     
     %writeMat(data,X,'double');
 
-    num_sweeps = '2000';
-    burn_in='1600';
+    
+    burn_in='1000';
+    num_sweeps = '1500';
     fprintf(1,'I2GMM is running...\n');
-    cmd = ['i2gmm.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',prefix,' 20'];
+    cmd = ['i2s.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',prefix,' 20'];
     tic;
     
     
