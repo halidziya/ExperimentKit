@@ -1,3 +1,4 @@
+clear;
 experiments='experiments/';
 folder = strcat(experiments,'parallel');
 igmm_mkdir(folder);
@@ -5,7 +6,7 @@ run('..\data\crism\readData.m')
 prefix = char(strcat(folder,'/crism/crism'));
 mkdir([prefix,'\plots\']);
 Xorg = X;
-X=igmm_normalize(X,20,true);
+X=igmm_normalize(X,20,false);
 for rep=1:10
     d=size(X,2);
     k0=0.05;
@@ -34,15 +35,16 @@ for rep=1:10
     
     
     
-    %system(cmd);
-    %slabels=readMat(char(strcat(prefix,'Labels.matrix')))+1;
+    system(cmd);
+    slabels=readMat(char(strcat(prefix,'Labels.matrix')))+1;
+    elapsed(rep) = toc;
     %[dishes rests likelihood labels]=i2gmm_readOutput('./');
     %sublabels=readMat(char(strcat(prefix ,'Sublabels.matrix')))+1;
     %slabels(isnan(slabels))=0;
-    %labels = align_labels(slabels');
+    labels = align_labels(slabels');
     
-    labels = kmeans(X,length(unique(Y(Y~=0))));
-    elapsed(rep) = toc;
+    %labels = kmeans(X,length(unique(Y(Y~=0))));
+    %elapsed(rep) = toc;
 
     %slabels=readMat(char(strcat(prefix ,'.matrix.superlabels')))+1;
     %labels=readMat(char(strcat(prefix ,'.matrix.labels')))+1;

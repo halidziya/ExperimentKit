@@ -36,26 +36,29 @@ for rep=1:10
     burn_in='1000';
     num_sweeps = '1500';
     fprintf(1,'I2GMM is running...\n');
-    cmd = ['i2s.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',prefix,' 20'];
+    cmd = ['igmm.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',prefix,' 20'];
     tic;
     
     
     %labels = kmeans(X,length(unique(Y(Y~=0))));
-    system(cmd);
-    %[dishes rests likelihood labels]=i2gmm_readOutput('./');
-    slabels=readMat(char(strcat(prefix,'Labels.matrix')))+1;
-    %sublabels=readMat(char(strcat(prefix ,'Sublabels.matrix')))+1;
-    slabels(isnan(slabels))=0;
-    %slabels(1,:)=[];
-    labels = align_labels(slabels');
-    
-    
+    %system(cmd);
     elapsed(rep) = toc;
+    %[dishes rests likelihood labels]=i2gmm_readOutput('./');
+    %slabels=readMat(char(strcat(prefix,'Labels.matrix')))+1;
+    %sublabels=readMat(char(strcat(prefix ,'Sublabels.matrix')))+1;
+    %slabels(isnan(slabels))=0;
+    %slabels(1,:)=[];
+    %labels = align_labels(slabels');
+    
+    
+    
 
     %slabels=readMat(char(strcat(prefix ,'.matrix.superlabels')))+1;
     %labels=readMat(char(strcat(prefix ,'.matrix.labels')))+1;
     %alabels = align_labels(slabels');
-    % gmd=gmdistribution.fit(X,26,'Regularize',0.1)
+    %gmd=gmdistribution.fit(X,length(unique(Y)),'Regularize',0.1)
+    %labels = gmd.cluster(X);
+    labels = kmeans(X,length(unique(Y)));
     % evaluationTable(Y,gmd.cluster(X))
     
     f1s=evaluationTable(Y(Y~=0),labels(Y~=0))
