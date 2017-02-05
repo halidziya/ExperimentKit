@@ -33,7 +33,7 @@ for datai=1:4
     burn_in='1000';
     num_sweeps = '1500';
     fprintf(1,'I2GMM is running...\n');
-    cmd = ['igmm.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',strcat(char(strcat(prefix  , num2str(datai)))),' 20'];
+    cmd = ['i2s.exe ',data,' ',pripath,' ',params,' ',num_sweeps,' ', burn_in,' ',strcat(char(strcat(prefix  , num2str(datai)))),' 20'];
     tic;
     system(cmd)
     elapsed(datai)=toc;

@@ -5,8 +5,8 @@ if (~exist('Xorg','var'))
     load('..\data\flowcap3\flowcapIII_all.mat')
     Xorg=X;
     Yorg=Y;
-    Y=Y(LA==1);
-    X=igmm_normalize(Xorg(LA==1,:),20,true);
+    Y=Y(LA<=2);
+    X=igmm_normalize(Xorg(LA<=2,:),20,true);
 end
 
 prefix = char(strcat(folder,'/Flowcap/i'));
